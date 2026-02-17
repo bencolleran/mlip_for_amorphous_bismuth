@@ -248,12 +248,10 @@ def plot_graph_kpoints(y_var):
 encut_change=True
 if encut_change==True:
     plot_graph_encut(energy_ref)
-    #plot_graph_encut(energy_perc)
     plot_graph_encut(energy_dif)
     plot_graph_encut(forces_rmse_ref)
 else:
     plot_graph_kpoints(energy_ref)
-    #plot_graph_kpoints(energy_perc)
     plot_graph_kpoints(energy_dif)
     plot_graph_kpoints(forces_rmse_ref)
 #had to rerun because all jobs were geometry optimizations
