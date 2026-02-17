@@ -10,13 +10,13 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[0]
 
 parser=argparse.ArgumentParser()
-parser.add_argument('--kpoints', type=str, default='6 6 6', help='argument is specified in the form "a b c"')
+parser.add_argument('--kpoints', type=str, default='1 1 1', help='argument is specified in the form "a b c"')
 parser.add_argument('--structure', type=str,)
 args=parser.parse_args()
 
 
-#atoms = read(f'{PROJECT_ROOT}/{args.structure}.dat', format="lammps-dump-text",specorder=["Bi"])#how to read lammps dump files
-atoms = read(f'{PROJECT_ROOT}/{args.structure}.cell')
+atoms = read(f'{PROJECT_ROOT}/{args.structure}.dat', format="lammps-dump-text",specorder=["Bi"])#how to read lammps dump files
+#atoms = read(f'{PROJECT_ROOT}/{args.structure}.cell')
 pmg_structure = AseAtomsAdaptor.get_structure(atoms)
 
 static_job = BaseCastepMaker(
