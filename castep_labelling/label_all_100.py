@@ -35,4 +35,5 @@ for i,file in enumerate(files):
 
 flow=Flow(jobs, name="label lammps data")
 resources = {"qverbatim": "#$ -cwd\n#$ -pe smp 128\n#$ -N Autoplex_jf_test\n#$ -o $JOB_ID.log\n#$ -e $JOB_ID.err\n#$ -P cpu\n#$ -l s_rt=05:00:00"}
+#resources = {"qverbatim": "#$ -cwd\n#$ -pe smp 64\n#$ -N Autoplex_jf_test\n#$ -o $JOB_ID.log\n#$ -e $JOB_ID.err\n#$ -P highmem\n#$ -l s_rt=05:00:00"}
 print(submit_flow(flow , worker="autoplex_project_worker", resources=resources, project="autoplex_project"))

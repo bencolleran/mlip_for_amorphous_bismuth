@@ -1,3 +1,6 @@
+import os
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["OMP_NUM_THREADS"] = "1"
 from ase import Atoms
 from ase.io import read
 from quippy.potential import Potential
@@ -6,19 +9,7 @@ import os
 import warnings
 warnings.filterwarnings("ignore", module="ase.calculators.castep")
 warnings.filterwarnings("ignore", module="ase.io.castep")
-import subprocess
-commands = [
-    "export OPENBLAS_NUM_THREADS=1",
-    "export OMP_NUM_THREADS=1"
-]
 
-for cmd in commands:
-    subprocess.run(cmd, shell=True, check=True)
-
-#script must be run in mlip_tests dir and run the below commands first
-#run in bash: 
-# export OPENBLAS_NUM_THREADS=1
-# export OMP_NUM_THREADS=1
 
 filepath="/u/vld/sedm7085/project/structures"
 

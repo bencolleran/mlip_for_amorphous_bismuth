@@ -1,3 +1,6 @@
+import os
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["OMP_NUM_THREADS"] = "1"
 from pathlib import Path
 import numpy as np
 from ase.io import Trajectory, read
@@ -5,15 +8,6 @@ from quippy.potential import Potential
 import warnings
 warnings.filterwarnings("ignore", module="ase.calculators.castep")
 warnings.filterwarnings("ignore", module="ase.io.castep")
-import subprocess
-
-commands = [
-    "export OPENBLAS_NUM_THREADS=1",
-    "export OMP_NUM_THREADS=1"
-]
-
-for cmd in commands:
-    subprocess.run(cmd, shell=True, check=True)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[0]
 #name = '20260203_163603'
