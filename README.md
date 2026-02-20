@@ -12,4 +12,11 @@ Some of the functionalities of the project are workflows for benchmarking DFT fu
 
 ## Dependencies
 
-The project relies on Autoplex, jobflow-remote and MongoDB as well as CASTEP and LAMMPS. The versions used were: autoplex==0.2.0, jobflow-remote==0.1.5 .
+The project requires a working installation of:
+
+- Python 3.10+
+- autoplex==0.2.0  
+- jobflow-remote==0.1.5  
+- MongoDB  
+- CASTEP  
+- LAMMPS  
