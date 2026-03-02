@@ -17,6 +17,9 @@ out*
 *.traj
 *.pyc
 *.json
-mlip_tests/*.xml
-mlip_tests/*sparse*
+*.xml
+*sparse*
+!mlips/correct_extended_data_mlip/*.xml*
+!mlips/initial_autoplex_mlip/*.xml*
+
 #ssh-keygen -t ed25519 -C "sedm7085@ox.ac.uk"

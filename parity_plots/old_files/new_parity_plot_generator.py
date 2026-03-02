@@ -1,8 +1,17 @@
+#!/usr/bin/env python3
+# extract_and_plot.py
+"""
+Reads an extxyz file, builds in-memory pandas DataFrames for energies and forces,
+and writes parity plots. Can be run from terminal, imported, run in a REPL, or
+double-clicked — it will use a GUI file picker if available, otherwise prompt.
+"""
+
 import sys
 import re
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[0]
@@ -46,7 +55,7 @@ def read_extxyz_to_dfs(path):
                 REF_fx = float(toks[4]); REF_fy = float(toks[5]); REF_fz = float(toks[6])
                 fx = float(toks[7]); fy = float(toks[8]); fz = float(toks[9])
 
-                force_rows.append((frame, i, fx, fy, fz, REF_fx, REF_fy, REF_fz,))
+                force_rows.append((frame, i, REF_fx, REF_fy, REF_fz, fx, fy, fz,))
 
             frame += 1
 
@@ -92,67 +101,23 @@ def parity_plot_forces(df, name="forces",path=f"{PROJECT_ROOT}/potential_data"):
     plt.savefig(f"{path}/{name}_plot.png", dpi=600, bbox_inches="tight")
     plt.close()
 
-# ---- new minimal function (group-by-frame RMSE and plot) ----
-def plot_frame_force_rmse(df_f, name="force_rmse_per_frame", path=f"{PROJECT_ROOT}/potential_data"):
-    """
-    Compute per-frame force RMSE (over all atoms and components) and plot frame vs RMSE.
-    RMSE is reported in meV/A to match parity_plot_forces.
-    """
-    if df_f.empty:
-        print("No force data to compute per-frame RMSE.")
-        return
-
-    frames = []
-    rmses = []
-    # group by frame, compute RMSE of vector components
-    for frame, g in df_f.groupby('frame'):
-        pred = g[['fx','fy','fz']].to_numpy()
-        ref  = g[['REF_fx','REF_fy','REF_fz']].to_numpy()
-        diff = pred - ref
-        rmse = np.sqrt(np.mean(diff**2))  # in eV/A
-        frames.append(int(frame))
-        rmses.append(rmse * 1000.0)       # convert to meV/A for consistency
-
-    frames = np.array(frames)
-    rmses = np.array(rmses)
-
-    # sort by frame (in case groupby wasn't in order)
-    order = np.argsort(frames)
-    frames = frames[order]
-    rmses = rmses[order]
-
-    # quick print summary
-    print(f"{name}: frames={frames.min()}..{frames.max()}, mean RMSE={rmses.mean():.6f} meV/A")
-
-    # plot
-    plt.figure(figsize=(6,3), dpi=150)
-    plt.plot(frames, rmses, marker='o', linestyle='-', markersize=3)
-    plt.xlabel("frame")
-    plt.ylabel("Force RMSE (meV/A)")
-    plt.title(f"{name}")
-    plt.grid(True, lw=0.3, alpha=0.6)
-    plt.tight_layout()
-    plt.savefig(f"{path}/{name}.png", dpi=300, bbox_inches="tight")
-    plt.close()
-
 if __name__ == "__main__":
-    var=1
+    var=2
     if var==1:
         path=f"{PROJECT_ROOT}/potential_data/correct_extended_data_mlip"
         data_path=path + "/quip_new_test.extxyz"
         df_e, df_f = read_extxyz_to_dfs(data_path)
-        parity_plot_energy(df_e, name="energies",path=path)
-        parity_plot_forces(df_f, name="forces",path=path)
-        plot_frame_force_rmse(df_f,path=path)
+        parity_plot_energy(df_e, name="newest_energies",path=path)
+        parity_plot_forces(df_f, name="newest_forces",path=path)
     elif var==2:
         path=f"{PROJECT_ROOT}/potential_data/initial_autoplex_mlip"
         data_path=path + "/quip_test.extxyz"
         df_e, df_f = read_extxyz_to_dfs(data_path)
         parity_plot_energy(df_e, name="energies",path=path)
         parity_plot_forces(df_f, name="forces",path=path)
-        plot_frame_force_rmse(df_f,path=path)
     else:
         path=f"{PROJECT_ROOT}/potential_data/correct_extended_data_mlip"
-        data_path=path + "/quip_new_test.extxyz"
+        data_path=path + "/new_potential_on_old_test_quip_test.extxyz"
         df_e, df_f = read_extxyz_to_dfs(data_path)
-        plot_frame_force_rmse(df_f)
+        parity_plot_energy(df_e, name="new_on_old_energies",path=path)
+        parity_plot_forces(df_f, name="new_on_old_forces",path=path)

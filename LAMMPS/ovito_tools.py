@@ -177,3 +177,5 @@ if __name__=="__main__":
     fig.tight_layout()
     fig.savefig(f"{PROJECT_ROOT}/images/KDE_{sigma}{out_prefix}.png", dpi=300, bbox_inches="tight")
     plt.show()
+
+    
